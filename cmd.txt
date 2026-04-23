@@ -1,0 +1,49 @@
+启动命令：
+
+#!/bin/bash
+
+xhost +
+docker run --name isaac-lab --entrypoint bash -it --gpus all \
+   -e "ACCEPT_EULA=Y" \
+   -e "PRIVACY_CONSENT=Y" \
+   -e DISPLAY=$DISPLAY \
+   --network=host \
+   -v $HOME/.Xauthority:/root/.Xauthority \
+   -v /tmp/.X11-unix:/tmp/.X11-unix \
+   -v ~/docker/isaac-sim/cache/kit:/isaac-sim/kit/cache:rw \
+   -v ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw \
+   -v ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw \
+   -v ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw \
+   -v ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw \
+   -v ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw \
+   -v ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw \
+   -v ~/docker/isaac-sim/documents:/root/Documents:rw \
+   -v /mnt/x-trainer:/workspace/xtrainer_leisaac:rw \
+   gdpi_isaac-lab
+
+
+export DISPLAY=:0
+
+python scripts/environments/teleoperation/teleop_se3_agent.py \
+    --task=task1 \
+    --teleop_device=bi_keyboard \
+    --num_envs=1 \
+    --device=cuda \
+    --enable_cameras \
+    --multi_view \
+   --record \
+    --dataset_file=./datasets/test.hdf5
+
+python scripts/environments/teleoperation/teleop_se3_agent.py \
+    --task=task1 \
+    --teleop_device=bi_keyboard \
+    --num_envs=1 \
+    --device=cuda \
+    --enable_cameras \
+    --multi_view
+
+
+python scripts/environments/teleoperation/replay.py --task=task1 --num_envs=1 --device=cuda --enable_cameras --replay_mode=action --dataset_file=./datasets/test.hdf5 --select_episodes 0 --task_type bi_keyboard
+
+
+python -c "import h5py; f=h5py.File('./datasets/test.hdf5','r'); print(len(list(f['data'].keys()))); print(list(f['data'].keys())); f.close()"
