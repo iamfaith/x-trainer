@@ -128,9 +128,9 @@ def process_xtrainer_data(dataset: LeRobotDataset, task: str, demo_group: h5py.G
             "observation.images.top": top_images[frame_index],
             "observation.images.left_wrist": left_images[frame_index],
             "observation.images.right_wrist": right_images[frame_index],
-            "task": task,
+            # "task": task,
         }
-        dataset.add_frame(frame=frame)
+        dataset.add_frame(frame=frame, task=task)
 
     return True
 
