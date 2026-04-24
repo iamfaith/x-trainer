@@ -25,6 +25,18 @@ python -m lerobot.scripts.train \
   --policy.push_to_hub=false
 
 
+python -m lerobot.scripts.train \
+  --policy.type=act \
+  --dataset.repo_id=lerobot_task1 \
+  --dataset.root="/root/.cache/huggingface/lerobot/faith/task1" \
+  --output_dir=outputs/train/act_faith_task1 \
+  --policy.device=cuda \
+  --num_workers=0 \
+  --policy.push_to_hub=false \
+  --steps=500 \
+  --save_freq=100
+
+
 
 训练结束后，启动server：
 
@@ -51,9 +63,18 @@ python scripts/evaluation/policy_inference.py \
     --policy_language_instruction="Grab cube and place into plate" \
     --device=cuda \
     --enable_cameras \
-    --policy_checkpoint_path="/mnt/x-trainer/outputs/train/act_dstx123_task1/checkpoints/last/pretrained_model"
+    --policy_checkpoint_path="outputs/train/act_dstx123_task1/checkpoints/last/pretrained_model"
 
 
 
+lerobot policy_server.py
 
-    --policy_checkpoint_path="./checkpoints/last/pretrained_model"
+self.policy = policy_class.from_pretrained(policy_specs.pretrained_name_or_path)
+
+
+
+dict_keys(['left_joint_pos_rel', 'left_joint_vel_rel', 'left_joint_pos_target', 'right_joint_pos_rel', 'right_joint_vel_rel', 'right_joint_pos_target', 'actions', 'left_wrist', 'right_wrist', 'top', 'task_description'])
+
+
+
+['left_wrist', 'right_wrist', 'top', 'stereo_left', 'stereo_right']
