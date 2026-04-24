@@ -28,13 +28,12 @@ python -m lerobot.scripts.train \
 python -m lerobot.scripts.train \
   --policy.type=act \
   --dataset.repo_id=lerobot_task1 \
-  --dataset.root="/root/.cache/huggingface/lerobot/faith/task1" \
+  --dataset.root="/root/.cache/huggingface/lerobot/dstx123/task1" \
   --output_dir=outputs/train/act_faith_task1 \
   --policy.device=cuda \
   --num_workers=0 \
   --policy.push_to_hub=false \
-  --steps=500 \
-  --save_freq=100
+  --steps=10000   --save_freq=2000
 
 
 

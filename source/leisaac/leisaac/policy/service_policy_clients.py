@@ -145,7 +145,7 @@ class LeRobotServicePolicyClient(Policy):
                 'names': ['height', 'width', 'channels'],
             }
         self.camera_keys = list(camera_infos.keys())
-
+        self.camera_infos = camera_infos
         self.policy_config = RemotePolicyConfig(
             policy_type,
             pretrained_name_or_path,
@@ -178,8 +178,28 @@ class LeRobotServicePolicyClient(Policy):
             raise RuntimeError("Failed to connect to policy server")
 
     def _send_observation(self, observation_dict: dict):
-        raw_observation = {f"{key}": observation_dict[key].cpu().numpy().astype(np.uint8)[0] for key in self.camera_keys}
-        raw_observation["task"] = observation_dict["task_description"]
+        # raw_observation = {f"{key}": observation_dict[key].cpu().numpy().astype(np.uint8)[0] for key in self.camera_keys}
+        # raw_observation["task"] = observation_dict["task_description"]
+
+        raw_observation = {}
+        for key in self.camera_keys:
+            if key in observation_dict and observation_dict[key] is not None:
+                raw = observation_dict[key].cpu().numpy().astype(np.uint8)[0]
+            else:
+                #### fallback to zeros using camera_infos shape
+                shape = self.camera_infos.get(key, (480, 640))
+                raw = np.zeros((shape[0], shape[1], 3), dtype=np.uint8)
+
+                if 'stereo_left' in key:
+                    raw = observation_dict['left_wrist'].cpu().numpy().astype(np.uint8)[0]
+                
+                if 'stereo_right' in key:
+                    raw = observation_dict['right_wrist'].cpu().numpy().astype(np.uint8)[0]
+
+
+            raw_observation[f"{key}"] = raw
+        raw_observation["task"] = observation_dict.get("task_description", "")
+
 
         if self.task_type == 'so101leader':
             joint_pos = convert_leisaac_action_to_lerobot(observation_dict["joint_pos"])

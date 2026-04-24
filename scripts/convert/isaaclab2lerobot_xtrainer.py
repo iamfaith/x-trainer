@@ -91,37 +91,37 @@ XTRAINER_FEATURES = {
         },
     }
     
-    ,"observation.images.stereo_left": {
-        "dtype": "video",
-        "shape": [480, 640, 3],
-        "names": ["height", "width", "channels"],
-        "video_info": {
-            "video.height": 480,
-            "video.width": 640,
-            "video.codec": "av1",
-            "video.pix_fmt": "yuv420p",
-            "video.is_depth_map": False,
-            "video.fps": 30.0,
-            "video.channels": 3,
-            "has_audio": False,
-        },
-    },
+    # ,"observation.images.stereo_left": {
+    #     "dtype": "video",
+    #     "shape": [480, 640, 3],
+    #     "names": ["height", "width", "channels"],
+    #     "video_info": {
+    #         "video.height": 480,
+    #         "video.width": 640,
+    #         "video.codec": "av1",
+    #         "video.pix_fmt": "yuv420p",
+    #         "video.is_depth_map": False,
+    #         "video.fps": 30.0,
+    #         "video.channels": 3,
+    #         "has_audio": False,
+    #     },
+    # },
 
-    "observation.images.stereo_right": {
-        "dtype": "video",
-        "shape": [480, 640, 3],
-        "names": ["height", "width", "channels"],
-        "video_info": {
-            "video.height": 480,
-            "video.width": 640,
-            "video.codec": "av1",
-            "video.pix_fmt": "yuv420p",
-            "video.is_depth_map": False,
-            "video.fps": 30.0,
-            "video.channels": 3,
-            "has_audio": False,
-        },
-    }
+    # "observation.images.stereo_right": {
+    #     "dtype": "video",
+    #     "shape": [480, 640, 3],
+    #     "names": ["height", "width", "channels"],
+    #     "video_info": {
+    #         "video.height": 480,
+    #         "video.width": 640,
+    #         "video.codec": "av1",
+    #         "video.pix_fmt": "yuv420p",
+    #         "video.is_depth_map": False,
+    #         "video.fps": 30.0,
+    #         "video.channels": 3,
+    #         "has_audio": False,
+    #     },
+    # }
 }
 
 def preprocess_joint_pos(joint_pos: np.ndarray) -> np.ndarray:
@@ -160,8 +160,8 @@ def process_xtrainer_data(dataset: LeRobotDataset, task: str, demo_group: h5py.G
             "observation.images.top": top_images[frame_index],
             "observation.images.left_wrist": left_images[frame_index],
             "observation.images.right_wrist": right_images[frame_index],
-            "observation.images.stereo_left": left_images[frame_index],
-            "observation.images.stereo_right": right_images[frame_index],
+            # "observation.images.stereo_left": left_images[frame_index],
+            # "observation.images.stereo_right": right_images[frame_index],
             # "task": task,
         }
         dataset.add_frame(frame=frame, task=task)
