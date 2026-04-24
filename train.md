@@ -5,6 +5,7 @@ sudo apt install -y ffmpeg
 
 sudo mount -o remount,size=8G /dev/shm
 
+没有num_workers 会爆共享内容
 
 python -m lerobot.scripts.train \
   --policy.type=act \
@@ -22,16 +23,16 @@ python -m lerobot.scripts.train \
   --output_dir=outputs/train/act_dstx123_task1 \
   --policy.device=cuda \
   --num_workers=0 \
-  --policy.push_to_hub=false
+  --policy.push_to_hub=false \
+  --steps=10000   --save_freq=2000
 
+
+恢复训练
 
 python -m lerobot.scripts.train \
-  --policy.type=act \
-  --dataset.repo_id=lerobot_task1 \
-  --dataset.root="/root/.cache/huggingface/lerobot/dstx123/task1" \
-  --output_dir=outputs/train/act_faith_task1 \
+  --config_path=outputs/train/act_faith_task1/checkpoints/last/pretrained_model/train_config.json \
+  --resume=true \
   --policy.device=cuda \
-  --num_workers=0 \
   --policy.push_to_hub=false \
   --steps=10000   --save_freq=2000
 
@@ -62,8 +63,23 @@ python scripts/evaluation/policy_inference.py \
     --policy_language_instruction="Grab cube and place into plate" \
     --device=cuda \
     --enable_cameras \
-    --policy_checkpoint_path="outputs/train/act_dstx123_task1/checkpoints/last/pretrained_model"
+    --episode_length_s 10 \
+    --policy_checkpoint_path="outputs/train/act_faith_task1/checkpoints/last/pretrained_model"
 
+
+
+python scripts/evaluation/policy_scoring.py \
+    --task=task1 \
+    --eval_rounds=10 \
+    --policy_type=xtrainer_act \
+    --policy_host=localhost \
+    --policy_port=5555 \
+    --policy_timeout_ms=5000 \
+    --policy_action_horizon=16 \
+    --policy_language_instruction="Grab cube and place into plate" \
+    --device=cuda \
+    --enable_cameras \
+    --policy_checkpoint_path="outputs/train/act_faith_task1/checkpoints/last/pretrained_model"
 
 
 lerobot policy_server.py
