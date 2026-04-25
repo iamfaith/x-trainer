@@ -19,12 +19,13 @@ python -m lerobot.scripts.train \
 python -m lerobot.scripts.train \
   --policy.type=act \
   --dataset.repo_id=lerobot_task1 \
-  --dataset.root="/root/.cache/huggingface/lerobot/dstx123/task1" \
-  --output_dir=outputs/train/act_dstx123_task1 \
+  --dataset.root="/root/.cache/huggingface/lerobot/merge_task1_50" \
+  --output_dir=outputs/train/act_task1_50 \
   --policy.device=cuda \
   --num_workers=0 \
   --policy.push_to_hub=false \
-  --steps=10000   --save_freq=2000
+  --batch_size=16 \
+  --steps=300000   --save_freq=2000
 
 
 恢复训练
@@ -63,8 +64,8 @@ python scripts/evaluation/policy_inference.py \
     --policy_language_instruction="Grab cube and place into plate" \
     --device=cuda \
     --enable_cameras \
-    --episode_length_s 10 \
-    --policy_checkpoint_path="outputs/train/act_faith_task1/checkpoints/last/pretrained_model"
+    --episode_length_s 5 \
+    --policy_checkpoint_path="outputs/train/act_task1/checkpoints/last/pretrained_model"
 
 
 
@@ -79,7 +80,7 @@ python scripts/evaluation/policy_scoring.py \
     --policy_language_instruction="Grab cube and place into plate" \
     --device=cuda \
     --enable_cameras \
-    --policy_checkpoint_path="outputs/train/act_faith_task1/checkpoints/last/pretrained_model"
+    --policy_checkpoint_path="outputs/train/act_task1/checkpoints/last/pretrained_model"
 
 
 lerobot policy_server.py
@@ -93,3 +94,6 @@ dict_keys(['left_joint_pos_rel', 'left_joint_vel_rel', 'left_joint_pos_target', 
 
 
 ['left_wrist', 'right_wrist', 'top', 'stereo_left', 'stereo_right']
+
+
+lerobot-0.3.3: lerobot-0.3.3\src\lerobot\scripts\server\policy_server.py：  _obs_sanity_checks (return True)

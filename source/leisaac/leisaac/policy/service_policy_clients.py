@@ -140,8 +140,8 @@ class LeRobotServicePolicyClient(Policy):
 
         camera_infos =  {'left_wrist': (480, 640), 'right_wrist': (480, 640), 'top': (480, 640)}
         for camera_key, camera_image_shape in camera_infos.items():
-            if camera_key not in ['left_wrist', 'right_wrist', 'top']:
-                continue
+            # if camera_key not in ['left_wrist', 'right_wrist', 'top']:
+            #     continue
             lerobot_features[f'observation.images.{camera_key}'] = {
                 'dtype': 'image',
                 'shape': (camera_image_shape[0], camera_image_shape[1], 3),
