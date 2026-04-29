@@ -63,7 +63,7 @@ import leisaac  # noqa: F401
 from isaaclab.utils.math import quat_apply
 from leisaac.utils.env_utils import get_task_type, dynamic_reset_gripper_effort_limit_sim
 from leisaac.tasks.task1.mdp.observations import object_in_container
-from leisaac.tasks.task2.mdp.observations import object_in_task2_intersection
+
 
 import carb
 import omni
@@ -182,8 +182,7 @@ def create_policy(env: ManagerBasedRLEnv, task_type: str):
             policy_type=policy_type,
             pretrained_name_or_path=args_cli.policy_checkpoint_path,
             actions_per_chunk=args_cli.policy_action_horizon,
-            device=args_cli.device,
-            verbose=False,
+            device=args_cli.device
         )
     elif "xtrainer_act" in args_cli.policy_type:
         from leisaac.policy import LeRobotServicePolicyClient
@@ -200,8 +199,7 @@ def create_policy(env: ManagerBasedRLEnv, task_type: str):
             policy_type='act',
             pretrained_name_or_path=args_cli.policy_checkpoint_path,
             actions_per_chunk=args_cli.policy_action_horizon,
-            device=args_cli.device,
-            verbose=False,
+            device=args_cli.device
         )
     elif args_cli.policy_type == "openpi":
         from leisaac.policy import OpenPIServicePolicyClient
@@ -346,6 +344,7 @@ def compute_task2_counts(env: ManagerBasedRLEnv, params: dict) -> dict:
             in_rect = torch.logical_and(in_rect_x, in_rect_y)
             in_rect = torch.logical_and(in_rect, in_rect_z)
 
+            from leisaac.tasks.task2.mdp.observations import object_in_task2_intersection
             in_intersection = object_in_task2_intersection(
                 env=env,
                 object_cfg=obj_cfg,

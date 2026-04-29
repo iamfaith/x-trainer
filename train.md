@@ -29,6 +29,19 @@ python -m lerobot.scripts.train \
   --policy.chunk_size=900 --policy.n_action_steps=200
 
 
+python -m lerobot.scripts.train \
+  --policy.type=act \
+  --dataset.repo_id=lerobot_task1 \
+  --dataset.root="/root/.cache/huggingface/lerobot/merge_task1_50" \
+  --output_dir=outputs/train/act_task1_50_chunk400_action80 \
+  --policy.device=cuda \
+  --num_workers=0 \
+  --policy.push_to_hub=false \
+  --batch_size=16 \
+  --steps=300000   --save_freq=2000 \
+  --policy.chunk_size=400 --policy.n_action_steps=80
+
+
 恢复训练
 
 python -m lerobot.scripts.train \
